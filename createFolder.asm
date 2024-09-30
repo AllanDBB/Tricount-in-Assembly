@@ -11,6 +11,7 @@
 .UDATA
 
 .CODE
+    ;TODO: Research about global, is it secure?, is there any other way to share the funtion?
     global createFolder   ; Make the function global
 
     ; Function to create a directory with specified permissions
