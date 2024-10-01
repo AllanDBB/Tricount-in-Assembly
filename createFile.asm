@@ -4,7 +4,7 @@
 ;     and handle any potential errors during the process.
 ;
 ; Input: 
-;     The name of the file to create is passing by the stack
+;     The name of the file to create is passed via the stack.
 ;
 ; Output: 
 ;     - A file in the path on the stack
@@ -21,39 +21,36 @@
 .UDATA
 
 .CODE
-    ;TODO: Research about global, is it secure?, is there any other way to share the funtion?
     global createFile   ; Make the function global
 
 createFile:
     ; Open or create the file
-    mov eax, 8                    ; syscall: creat-https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md 
-    mov ebx, [esp + 4]            ; load the file name address from the stack
+    mov eax, 8                    ; syscall: creat
+    mov ebx, [esp + 4]            ; Load the file name address from the stack
     mov ecx, 0o755                ; Load the permissions into ECX
-    ;7 Read, write, and execute permissions for the owner.
-    ;5 Read and execute permissions for the group.
-    ;5 Read and execute permissions for others.
+    ; 7 Read, write, and execute permissions for the owner.
+    ; 5 Read and execute permissions for the group.
+    ; 5 Read and execute permissions for others.
 
-    int 0x80                      ; system call
+    int 0x80                      ; Execute the system call
 
     ; Check for errors
     cmp eax, 0
-    jl .error                     ; If there is an error eax<0
+    jl .error                     ; If there is an error (eax < 0)
 
-    ; Save the file descriptor
-    ; mov edi, eax
-
+    ; File descriptor is returned in EAX, can be used for further operations if needed.
     ; Close the file
     mov eax, 6                    ; syscall: close
-    ;mov ebx, edi                  ; file descriptor
-    int 0x80                      ; system call
+    mov ebx, eax                  ; Use the file descriptor returned from creat
+    int 0x80                      ; Execute the system call
 
     ; Display success message
     PutStr success_msg
 
-    ret                           ; return to the caller function
+    ret                           ; Return to the caller function
 
 .error:
     ; Error handling
     PutStr error_msg
 
-    ret                           ; return to the caller function
+    ret                           ; Return to the caller function
