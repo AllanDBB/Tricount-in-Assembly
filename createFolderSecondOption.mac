@@ -1,0 +1,29 @@
+     
+
+; Macro to create a directory with specified permissions
+%macro createFolder 2
+    ; Argument 1: directory name
+    ; Argument 2: error_msg
+
+    lea ebx, %1            ; Load the address of the directory name into EBX
+
+    mov ecx, 0o755         ; Load the permissions into ECX :
+    ;7 Read, write, and execute permissions for the owner.
+    ;5 Read and execute permissions for the group.
+    ;5 Read and execute permissions for others.
+
+    mov eax, 39            ; Syscall number for mkdir -https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md 
+    int 80h                ; Call the interrupt, looks system call number stored in EAX
+
+    ; Check for errors 
+    ;A return value of 0 indicates success, while any negative value (i.e., less than zero) indicates an error.
+    cmp eax, 0             ; Check if the call was successful
+    jl .error              ; If eax < 0, there was an error
+
+    jmp .done              ; Jump to the end of the macro
+
+.error:
+    PutStr %2       ; Call PutStr to display the error message
+    nwln                    ; New line for better readability
+.done:
+%endmacro
