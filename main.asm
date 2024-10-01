@@ -12,30 +12,30 @@
     file_name3 db '/o.txt', 0
 
 .UDATA
-    folder_name resb 2
+    folder_name resb 1
 
 .CODE
-   ;TODO: Research the correct way to import funtions
+   ;TODO: Research the correct way to import functions
     extern createFolder      ; Declare the external function
-    ;extern createFile        ; Declare the external function
+    extern createFile        ; Declare the external function
     extern appendString      ; Declare the external function
 
     .STARTUP
+        GetStr folder_name, 1   ; Get the path name from user input
         ; Create folder
-        GetStr folder_name,1
-        push folder_name     ; Push the address of the folder name onto the stack
-        call createFolder    ; Call the createFolder function
-        add esp, 4          ; Clean up the stack after the call
+        push folder_name        ; Push the address of the folder name onto the stack
+        call createFolder     ; Call the createFolder function
+        add esp, 4            ; Clean up the stack after the call
 
-        ; Crear archivo deudas.txt
-        push file_name1             ; Empujar la dirección del nombre del archivo
-        push folder_name            ; Empujar la dirección del nombre de la carpeta
-        call appendString           ; Llamar a la función appendString para concatenar
-        add esp, 8                  ; Limpiar la pila
-
-        PutStr folder_name
-        ;push folder_name            ; Empujar el nombre de carpeta + archivo
-        ;call createFile             ; Llamar a createFile
-        ;add esp, 4                  ; Limpiar la pila
+        ; Create file deudas.txt
+        mov edx, folder_name    ; Move the address of the path name to edx
+        push file_name1       ; Push the address of the file name
+        push edx              ; Push the address of the folder name
+        call appendString      ; Call the appendString function to concatenate
+        add esp, 8            ; Clean up the stack
+    
+        push edx              ; Push the folder name + file name
+        call createFile       ; Call createFile
+        add esp, 4            ; Clean up the stack
 
     .EXIT
