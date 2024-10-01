@@ -1,4 +1,12 @@
-   %include "io.mac"
+;Tricount                  appendString.ASM
+; Objective: Append one string to another.
+; Input: 
+;   - Address of the destination string (folder_name) on the stack.
+;   - Address of the source string (file_name) on the stack.
+; Output:
+;   - The destination string is modified to include the source string at the end.
+;   - The function does not return any value, but the destination string is updated in-place.
+%include "io.mac"
 
 .DATA
  

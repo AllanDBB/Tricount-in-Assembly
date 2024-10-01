@@ -1,3 +1,17 @@
+; Tricount                  createFile.ASM
+; Objective: 
+;     To create a file in the current directory,
+;     and handle any potential errors during the process.
+;
+; Input: 
+;     The name of the file to create is passing by the stack
+;
+; Output: 
+;     - A file in the path on the stack
+;     - Success message printed to standard output if file creation is successful.
+;     - Error message printed to standard output if file creation fails.
+;
+; Note: This program uses Linux system calls to manage file operations.
 %include "io.mac"
 
 .DATA
